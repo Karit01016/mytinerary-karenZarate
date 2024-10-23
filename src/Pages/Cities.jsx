@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ImHappy } from "react-icons/im";
+
+import { useNavigate } from 'react-router-dom'
 
 function Cities() {
   const [dataCities,setDataCities] = useState( [])
+  const navigate = useNavigate()
   const[search, setSearch] = useState ("")
 
   useEffect(() => { 
@@ -36,6 +38,12 @@ function handlear_search (e) {
 
 }
  console.log(dataCities);
+
+ const handlerNavigate = (city)=>{
+  navigate("/details", {state:city})
+} 
+
+
  
   return (
     <>
@@ -45,12 +53,12 @@ function handlear_search (e) {
           <input type="text" onChange={(e) => handlear_search(e) }/>
         </div>
          { dataCities.response ? 
-        <div className=" grid grid-cols-2 md:grid-cols-4 ">
+        <div className=" grid grid-cols-2 md:grid-cols-4 gap-2">
           {dataCities.response.map(city => (
-            <div>
-              <img className="w-full h-[20vh]" src={city.photo} alt="" />
+            <div className=" relative ">
+              <img className="w-full object-cover h-[25vh]" src={city.photo} alt="" />
               <p className=" absolute top-2 bg-black/50 text-white"> {city.name}</p>
-              <button className=" absolute bottom-2 p-3 ">more information </button>
+              <button onClick={() => handlerNavigate(city) } className=" absolute bg-orange-300 bottom-2 p-2 left-[25%]  ">more information </button>
             </div>
 
            ))}
