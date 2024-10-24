@@ -17,11 +17,30 @@ const colombianCities = [
 
 
 function Carousel() {
+  
   const [currentSlide, setCurrentSlide] = useState(0);
+ 
   const slides = [];
+ 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
 
-  for (let i = 0; i < colombianCities.length; i += 4) {
-    slides.push(colombianCities.slice(i, i + 4));
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  for (let i = 0; i < colombianCities.length; i += (windowWidth<768?2:4)) {
+    slides.push(colombianCities.slice(i, i + (windowWidth<768?2:4)));
   }
 
   useEffect(() => {
@@ -38,7 +57,7 @@ function Carousel() {
           {slides.map((slide, index) => (
             <div key={index} className="flex-shrink-0 w-full flex justify-around">
               {slide.map((city, idx) => (
-                <div key={idx} className="w-1/4 p-2">
+                <div key={idx} className="w-1/2 md:w-1/4 p-2 ">
                   <img src={city.image} alt={city.name} className="w-full h-96 object-cover rounded-md" />
                   <p className="text-center mt-2 font-serif">{city.name}</p>
                 </div>

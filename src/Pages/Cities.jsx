@@ -13,7 +13,7 @@ function Cities() {
     try {
       let cities = []
 
-      if (search != "") {
+      if (search == "") {
         cities = await fetch("http://localhost:8080/api/cities/all")
       }
       else{
@@ -34,6 +34,8 @@ function Cities() {
   
 
 function handlear_search (e) {
+  console.log(" entro ");
+  
   setSearch(s => s = e.target.value)
 
 }
@@ -49,7 +51,7 @@ function handlear_search (e) {
     <>
       <div className="p-4 ">
         <h1 className="text-center text-3xl font-bold py-4 ">Cities</h1>
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center py-5">
           <input type="text" onChange={(e) => handlear_search(e) }/>
         </div>
          { dataCities.response ? 
@@ -58,7 +60,7 @@ function handlear_search (e) {
             <div className=" relative ">
               <img className="w-full object-cover h-[25vh]" src={city.photo} alt="" />
               <p className=" absolute top-2 bg-black/50 text-white"> {city.name}</p>
-              <button onClick={() => handlerNavigate(city) } className=" absolute bg-orange-300 bottom-2 p-2 left-[25%]  ">more information </button>
+              <button onClick={() => handlerNavigate(city) } className=" absolute bg-orange-300/50 bottom-2 p-2 left-[1%] md:left-[25%]  ">more information </button>
             </div>
 
            ))}

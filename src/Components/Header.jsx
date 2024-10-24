@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SideMenu from "./SideMenu";
-import { CiMenuBurger } from "react-icons/ci";
 import { FaUserAlt } from "react-icons/fa";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="bg-gradient-to-r from-slate-500 to-black  h-24 text-yellow-300 p-4 flex items-center justify-between">
-      <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden">
-        {<CiMenuBurger />}
-        <svg className="w-15 h-15" fill="none" stroke="currentColor">
+    <header className="absolute z-50 w-full bg-gradient-to-r from-slate-500 to-black  h-24 text-yellow-300 p-4 flex items-center justify-between">
+      <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden relative top-[5vh]">
+       
+        <svg className="w-[15vw] h-[15vh]" fill="none" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -23,7 +22,7 @@ function Header() {
       <Link to="/" className="text-4xl font-bold">
         MyTinerary
       </Link>
-      <div className="hidden md:flex space-x-4 text-3xl">
+      <div className="hidden md:flex  md:space-x-4 text-3xl">
         <Link to="/" className="hover:underline ">
           Home
         </Link>
