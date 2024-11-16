@@ -1,43 +1,47 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import SideMenu from "./SideMenu";
-import { FaUserAlt } from "react-icons/fa";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa';
 
-function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
+const Header = () => {
   return (
-    <header className="absolute z-50 w-full bg-gradient-to-r from-slate-500 to-black  h-24 text-yellow-300 p-4 flex items-center justify-between">
-      <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden relative top-[5vh]">
-       
-        <svg className="w-[15vw] h-[15vh]" fill="none" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
-      <Link to="/" className="text-4xl font-bold">
-        MyTinerary
-      </Link>
-      <div className="hidden md:flex  md:space-x-4 text-3xl">
-        <Link to="/" className="hover:underline ">
-          Home
-        </Link>
-        <Link to="/cities" className="hover:underline">
-          Cities
-        </Link>
-      </div>
-      <div className="flex flex-col items-center">
-        {<FaUserAlt className="text-4xl"/>}
+    <header className="flex items-center justify-between h-28 bg-blue-200 text-yellow-800 py-4 px-8 shadow-lg text-3xl">
 
-        <p className="">LOGIN</p>
+      {/* Logo */}
+      <Link
+        to="/"
+        className="hover:text-yellow-400 transition-colors duration-300 font-bold"
+      >
+        MY TINERARY
+      </Link>
+
+      {/* Navigation */}
+      <nav>
+        <ul className="flex space-x-8 text-lg">
+          <li>
+            <Link
+              to="/"
+              className="hover:text-yellow-400 transition-colors duration-300 font-bold"
+            >
+              HOME
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/cities"
+              className="hover:text-yellow-400 transition-colors duration-300 font-bold"
+            >
+              CITIES
+            </Link>
+          </li>
+        </ul>
+      </nav>
+
+      {/* User Icon */}
+      <div>
+        <FaUserCircle size={35} className="text-yellow-400 hover:text-white transition-colors duration-300 cursor-pointer" />
       </div>
-      {menuOpen && <SideMenu setMenuOpen={setMenuOpen} />}
     </header>
   );
-}
+};
 
 export default Header;

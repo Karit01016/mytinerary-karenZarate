@@ -1,47 +1,45 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Carousel from "../components/Carousel";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Carousel from "../components/Carousel"; 
 
-function Home() {
+const Home = () => {
   return (
-    <div className="">
-    <section
-      className="relative text-center h-[100vh] flex justify-center items-center overflow-y-visible"
-    >
-      <img
-        autoPlay
-        loop
-        muted
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        src="https://media.traveler.es/photos/61376cd8652b2e41f8dce990/master/w_1600%2Cc_limit/139215.jpg"
-      />
-      <div className="relative bg-black bg-opacity-25 p-10 flex flex-col items-center justify-center w-96">
-        <h1 className="text-4xl text-white font-bold">MyTinerary</h1>
-        <p className="text-white mt-2">
-          Find your perfect trip, designed by insiders who know and love their
-          cities!
-        </p>
+    <div className="w-full h-full">
+
+      {/* Hero Section */}
+      <div className="relative w-full h-screen  object-cover">
+        <img
+          src="https://img.freepik.com/foto-gratis/playa-tropical-arena-blanca_1203-1710.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid"
+          alt="Nature background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      
+     
+
+        {/* Contenedor del texto y botón */}
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-10">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-4 drop-shadow-lg tracking-wider">
+            My Tinerary
+          </h1>
+          <p className="text-lg md:text-2xl text-white mb-8 max-w-2xl drop-shadow-md tracking-wide">
+            Discover your perfect trip, crafted by insiders who truly know and love their cities!
+          </p>
+
+          <Link to="/cities">
+            <button className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-10 py-3 rounded-full font-semibold shadow-xl hover:scale-105 transition-transform duration-300">
+              Let's Explore Cities
+            </button>
+          </Link>
+        </div>
       </div>
-    </section>
-  
-    <section className="text-center my-8">
-      <Link
-        to="/cities"
-        className="inline-block bg-yellow-700 text-yellow-500 px-6 py-3 rounded-sm text-xl hover:bg-blue-600"
-      >
-        <span>Let’s discover your next destination </span>
-      </Link>
-    </section>
-  
-    <section className="my-8">
-      <h2 className="text-4xl text-center font-bold mb-4">
-        Popular My Tineraries
-      </h2>
-      <Carousel />
-    </section>
-  </div>
-  
+
+      {/* Carousel Section */}
+      <div className="py-12 bg-gradient-to-b from-blue-50 to-blue-100">
+        <Carousel />
+      </div>
+
+    </div>
   );
-}
+};
 
 export default Home;

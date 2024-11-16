@@ -1,75 +1,90 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCities, selectedCity } from '../store/actions/cityActions.js';
+import { Link } from 'react-router-dom';
+import SearchBar from '../components/SearchBar.jsx';
 
-import { useNavigate } from 'react-router-dom'
+const Cities = () => {
+  const dispatch = useDispatch();
+  const { cities, loading, search, error } = useSelector((state) => state.cities);
+  const [page, setPage] = useState(0);
 
-function Cities() {
-  const [dataCities,setDataCities] = useState( [])
-  const navigate = useNavigate()
-  const[search, setSearch] = useState ("")
+  // Cargar ciudades solo al montar el componente
+  useEffect(() => {
+    dispatch(fetchCities());
+  }, [dispatch]);
 
-  useEffect(() => { 
-
-  const getData = async () => {
-    try {
-      let cities = []
-
-      if (search == "") {
-        cities = await fetch("http://localhost:8080/api/cities/all")
-      }
-      else{
-        cities = await fetch(`http://localhost:8080/api/cities/all?name=${search}`)
-      } 
-      cities= await cities.json()
-      setDataCities(c => c = cities)
-
-    } catch (error) {
-      console.log(error);
-      
-      
-    }
-  }
-  getData()
-
-  }, [search])
-  
-
-function handlear_search (e) {
-  console.log(" entro ");
-  
-  setSearch(s => s = e.target.value)
-
-}
- console.log(dataCities);
-
- const handlerNavigate = (city)=>{
-  navigate("/details", {state:city})
-} 
-
-
- 
-  return (
-    <>
-      <div className="p-4 ">
-        <h1 className="text-center text-3xl font-bold py-4 ">Cities</h1>
-        <div className="w-full flex justify-center py-5">
-          <input type="text" onChange={(e) => handlear_search(e) }/>
-        </div>
-         { dataCities.response ? 
-        <div className=" grid grid-cols-2 md:grid-cols-4 gap-2">
-          {dataCities.response.map(city => (
-            <div className=" relative ">
-              <img className="w-full object-cover h-[25vh]" src={city.photo} alt="" />
-              <p className=" absolute top-2 bg-black/50 text-white"> {city.name}</p>
-              <button onClick={() => handlerNavigate(city) } className=" absolute bg-orange-300/50 bottom-2 p-2 left-[1%] md:left-[25%]  ">more information </button>
-            </div>
-
-           ))}
-        </div>:"" 
-        
-        }
-      </div>
-    </>
+  // Filtrar ciudades localmente en función de `search`
+  const filteredCities = cities.filter((city) =>
+    city.name.toLowerCase().includes(search.toLowerCase())
   );
-}
+
+  // Función para manejar el clic en una ciudad y despachar la ciudad seleccionada
+  const handleCityClick = (city) => {
+    dispatch(selectedCity(city));
+  };
+
+  // Función para cambiar de página
+  const itemsPerPage = 2;
+  const totalPages = Math.ceil(filteredCities.length / itemsPerPage);
+  const goToNextPage = () => setPage((prevPage) => (prevPage + 1) % totalPages);
+  const goToPreviousPage = () => setPage((prevPage) => (prevPage - 1 + totalPages) % totalPages);
+
+  if (loading) {
+    return <p className="text-center text-xl">Loading cities...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-xl text-red-500">Error: {error}</p>;
+  }
+
+  return (
+    <div className="p-8 bg-gray-100 min-h-screen flex flex-col items-center">
+      <h1 className="text-5xl font-bold mb-12 text-gray-800">Discover Cities</h1>
+
+      {/* Search Bar */}
+      <SearchBar />
+
+      <div className="flex justify-center items-center space-x-6 mt-10">
+        <button
+          onClick={goToPreviousPage}
+          className="bg-gray-300 text-gray-600 p-3 rounded-full hover:bg-gray-400 transition duration-300 shadow-md"
+        >
+          &#8249;
+        </button>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl">
+          {filteredCities.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage).map((city, index) => (
+            <Link 
+              to={`/city/${city._id}`}
+              key={index}
+              onClick={() => handleCityClick(city)}
+              className="relative group overflow-hidden rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105"
+            >
+              {/* Imagen de la Ciudad */}
+              <img
+                src={city.photo}
+                alt={city.name}
+                className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              
+              {/* Superposición Oscura y Nombre de la Ciudad */}
+              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <h3 className="text-3xl font-semibold text-white">{city.name}</h3>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <button
+          onClick={goToNextPage}
+          className="bg-gray-300 text-gray-600 p-3 rounded-full hover:bg-gray-400 transition duration-300 shadow-md"
+        >
+          &#8250;
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export default Cities;

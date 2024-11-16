@@ -1,80 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const colombianCities = [
-  { name: 'Bogotá', image: 'https://content.skyscnr.com/m/67f4e21849187647/original/GettyImages-167217640_doc.jpg' },
-  { name: 'Medellín', image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/10/5f/26/2c.jpg' },
-  { name: 'Cali', image: 'https://www.cali.gov.co/gobierno/info/principal/media/pubInt/thumbs/thpub_700x400_147956.jpg' },
-  { name: 'Cartagena', image: 'https://www.viajes.cl/hubfs/Torre%20del%20Reloj%20en%20Cartagena%20de%20Indias,%20Colombia.jpg' },
-  { name: 'Barranquilla', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIn1hEOwQc7kX6RC3b3IpBdLiI-wZ6sZwpVw&s' },
-  { name: 'Bucaramanga', image: 'https://www.shutterstock.com/image-photo/hormiga-culona-sculpture-bucaramanga-ciudad-600nw-2257769405.jpg' },
-  { name: 'Pereira', image: 'https://media.gettyimages.com/id/459032229/es/foto/pereira-catedral-interior-colombia.jpg?s=612x612&w=gi&k=20&c=GmUnKL51s4ORpnMoVYf2COWUAsl3__07vpDpINU_Vew=' },
-  { name: 'Manizales', image: 'https://media.istockphoto.com/id/1148942415/es/foto/plaza-de-bolivar-in-manizales-colombia.jpg?s=612x612&w=0&k=20&c=cP_IPW5ymOT7boERfzh_tM7Co_NDmqKkqpFuh-YxoLc=' },
-  { name: 'Santa Marta', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSMv2nDEBGPiNOCRzwUD9anfmyScFrQFP8VQ&s' },
-  { name: 'Cúcuta', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0jg_jJdYsJqxjD6Ccrjn4iD7I1LsmOmC5uA&s' },
-  { name: 'Ibagué', image: 'https://i1.wp.com/mejoreszonas.com/wp-content/uploads/2019/12/Las-mejores-zonas-donde-alojarse-en-Ibague-Colombia.jpg?fit=1200%2C675&ssl=1' },
-  { name: 'Villavicencio', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU8cJeG-6ims066Zf-x7OjfTI-2YISj1DSog&s' },
+const cities = [
+  { name: 'New York', image: 'https://img.freepik.com/foto-gratis/toma-aerea-edificios-ciudad-cielo-nublado_181624-46386.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid' },
+  { name: 'Paris', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34' },
+  { name: 'Tokyo', image: 'https://img.freepik.com/foto-gratis/horizonte-tokio-puente-rainbow-torre-tokio-tokio-japon_335224-174.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid' },
+  { name: 'Sydney', image: 'https://images.unsplash.com/photo-1505275350441-83dcda8eeef5' },
+  { name: 'Rome', image: 'https://img.freepik.com/foto-gratis/hermosa-foto-famoso-anfiteatro-coliseo-romano-impresionante-cielo-al-amanecer_181624-6998.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid' },
+  { name: 'Barcelona', image: 'https://img.freepik.com/foto-gratis/vista-badalona-espana_1398-178.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid' },
+  { name: 'London', image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b' },
+  { name: 'Dubai', image: 'https://images.unsplash.com/photo-1548191265-cc70d3d45ba1' },
+  { name: 'Singapore', image: 'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6' },
+  { name: 'Berlin', image: 'https://img.freepik.com/fotos-premium/antiguo-palacio-potsdam-cerca-berlin-alemania_134785-10048.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid' },
+  { name: 'Amsterdam', image: 'https://img.freepik.com/fotos-premium/mujer-joven-impermeable-amarillo-disfrutando-vista-manana-hermosa-vista-paisaje-urbano-amsterdam_506452-9595.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid' },
+  { name: 'Hong Kong', image: 'https://img.freepik.com/foto-gratis/escena-puerto-victoria-hong-kong-puerto-victoria_74190-7852.jpg?uid=R156136059&ga=GA1.1.1296032633.1729713489&semt=ais_hybrid' },
 ];
 
+const Carousel = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-function Carousel() {
-  
-  const [currentSlide, setCurrentSlide] = useState(0);
- 
-  const slides = [];
- 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 3) % cities.length);
+  };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-      
-    };
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + cities.length - 3) % cities.length);
+  };
 
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  for (let i = 0; i < colombianCities.length; i += (windowWidth<768?2:4)) {
-    slides.push(colombianCities.slice(i, i + (windowWidth<768?2:4)));
-  }
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [slides.length]);
+  const visibleCities = cities.slice(currentIndex, currentIndex + 3);
 
   return (
-    <div className="relative ">
-      <div className="overflow-hidden ">
-        <div className="flex transition-transform duration-500 " style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-          {slides.map((slide, index) => (
-            <div key={index} className="flex-shrink-0 w-full flex justify-around">
-              {slide.map((city, idx) => (
-                <div key={idx} className="w-1/2 md:w-1/4 p-2 ">
-                  <img src={city.image} alt={city.name} className="w-full h-96 object-cover rounded-md" />
-                  <p className="text-center mt-2 font-serif">{city.name}</p>
+    <div className="relative w-full max-w-6xl mx-auto my-12 p-4 overflow-hidden">
+      <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">Popular Destinations</h2>
+
+      <div className="flex items-center justify-between space-x-4">
+        <button
+          onClick={prevSlide}
+          className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full shadow-lg focus:outline-none transform hover:scale-110 transition-transform"
+        >
+          &#8249;
+        </button>
+
+        <div className="flex space-x-6 w-full justify-center">
+          {visibleCities.map((city, index) => (
+            <Link
+              to="/cities"
+              key={index}
+              className="w-1/3 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105"
+            >
+              <div className="relative w-full h-64 overflow-hidden">
+                <img
+                  src={city.image}
+                  alt={city.name}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="text-2xl font-bold text-white">{city.name}</h3>
                 </div>
-              ))}
-            </div>
+              </div>
+            </Link>
           ))}
         </div>
+
+        <button
+          onClick={nextSlide}
+          className="p-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-full shadow-lg focus:outline-none transform hover:scale-110 transition-transform"
+        >
+          &#8250;
+        </button>
       </div>
-     
-      <button onClick={() => setCurrentSlide((currentSlide - 1 + slides.length) % slides.length)} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full">
-        &lt;
-      </button>
-      <button onClick={() => setCurrentSlide((currentSlide + 1) % slides.length)} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full">
-        &gt;
-      </button>
     </div>
   );
-}
+};
 
 export default Carousel;
